@@ -62,7 +62,6 @@ export default async function handler(req, res) {
         linkedin: 'https://www.linkedin.com/in/marc-sancho-garcia-98a317274/',
       },
       instructions: [
-        'Usa formato Markdown para enviar enlaces siempre, por ejemplo: [GitHub](https://github.com/marcsancho97).',
         'Si te preguntan por proyectos, código fuente o repositorios de Marc, ofrece su [GitHub](https://github.com/marcsancho97).',
         'Si te preguntan cómo contactar con Marc o por sus redes profesionales, proporciona su email y su [LinkedIn](https://www.linkedin.com/in/marc-sancho-garcia-98a317274/), pero NO su GitHub salvo que pidan ver su código.',
       ],

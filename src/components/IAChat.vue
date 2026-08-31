@@ -184,8 +184,6 @@ const userInput = ref('')
 const isLoading = ref(false)
 const messages = ref([])
 
-/* ... (resto de funciones auxiliares como parseMarkdown, scrollToBottom, addMessage) ... */
-
 /* ---------------- SEND MESSAGE ---------------- */
 
 const sendMessage = async () => {
@@ -212,7 +210,6 @@ const sendMessage = async () => {
         content: m.content,
       }))
 
-    /* Petición al backend proxy seguro */
     /* Petición al backend en Vercel */
     const response = await axios.post(API_URL, { history }, { timeout: 60000 })
     const aiResponse = response?.data?.content
@@ -327,7 +324,6 @@ Soy el asistente virtual de Marc.
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* Mejora para listas en las respuestas */
 :deep(.list-disc li) {
   margin-left: 1em;
   padding-left: 0.5em;
@@ -339,5 +335,53 @@ Soy el asistente virtual de Marc.
 
 :deep(.inline-flex) {
   display: inline-flex;
+}
+
+:deep(.prose a) {
+  color: #2563eb;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+:deep(.prose a:hover) {
+  color: #1d4ed8;
+  text-decoration-thickness: 2px;
+}
+/* --- ANIMACIÓN DE APARICIÓN PARA LOS MENSAJES --- */
+:deep(.chat-history > div) {
+  animation: fadeInMessage 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInMessage {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- ESTILO MEJORADO PARA LOS ENLACES --- */
+:deep(.prose a) {
+  color: #2563eb;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+:deep(.prose a:hover) {
+  color: #1d4ed8;
+  background-color: rgba(37, 99, 235, 0.05);
+  padding-left: 2px;
+  padding-right: 2px;
+  border-radius: 4px;
 }
 </style>
