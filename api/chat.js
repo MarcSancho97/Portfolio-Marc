@@ -1,60 +1,37 @@
-export const config = {
-  runtime: 'edge',
-}
+export default async function handler(req, res) {
+  // Cabeceras CORS de respuesta
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
+  )
 
-export default async function handler(req) {
-  const corsHeaders = {
-    'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-    'Access-Control-Allow-Headers':
-      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
-  }
-
-  // 1. Responder a peticiones preflight (OPTIONS)
   if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 200, headers: corsHeaders })
+    return res.status(200).end()
   }
 
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Método no permitido' }), {
-      status: 405,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    })
+    return res.status(405).json({ error: 'Método no permitido' })
   }
 
   try {
-    let history = []
-
-    // Lectura segura del body
-    try {
-      const bodyText = await req.text()
-      const body = bodyText ? JSON.parse(bodyText) : {}
-      history = body.history || []
-    } catch (e) {
-      return new Response(JSON.stringify({ error: 'Formato JSON inválido en la petición' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
+    let body = req.body
+    if (typeof body === 'string') {
+      try {
+        body = JSON.parse(body)
+      } catch (e) {}
     }
 
-    if (!Array.isArray(history)) {
-      return new Response(JSON.stringify({ error: 'El historial debe ser un array' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
-    }
+    const { history } = body || {}
 
     const apiKey = process.env.OPENROUTER_API_KEY
     if (!apiKey) {
       console.error('OPENROUTER_API_KEY no encontrada en process.env')
-      return new Response(
-        JSON.stringify({ error: 'Falta OPENROUTER_API_KEY en las variables de entorno de Vercel' }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      )
+      return res
+        .status(500)
+        .json({ error: 'Falta la API Key en las variables de entorno de Vercel' })
     }
 
     const myInfo = {
@@ -98,7 +75,7 @@ export default async function handler(req) {
             role: 'system',
             content: `Eres el asistente virtual de Marc Sancho.\n\n${JSON.stringify(myInfo, null, 2)}`,
           },
-          ...history,
+          ...(history || []),
         ],
         temperature: 0.7,
         max_tokens: 500,
@@ -108,29 +85,13 @@ export default async function handler(req) {
     const data = await openRouterRes.json()
 
     if (!openRouterRes.ok) {
-      console.error('Respuesta de error de OpenRouter:', data)
-      return new Response(
-        JSON.stringify({ error: 'Error devuelto por la API de OpenRouter', details: data }),
-        {
-          status: openRouterRes.status,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        },
-      )
+      return res.status(openRouterRes.status).json({ error: data })
     }
 
-    const aiResponse = data?.choices?.[0]?.message?.content
-    return new Response(JSON.stringify({ content: aiResponse }), {
-      status: 200,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    })
+    const aiResponse = data?.choices?.[0]?.message?.content || 'No se recibió respuesta.'
+    return res.status(200).json({ content: aiResponse })
   } catch (error) {
-    console.error('Error no capturado en Edge Function:', error)
-    return new Response(
-      JSON.stringify({ error: 'Error interno en la Edge Function', details: error.message }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      },
-    )
+    console.error('Error en Serverless Function:', error)
+    return res.status(500).json({ error: 'Error interno del servidor', details: error.message })
   }
 }
