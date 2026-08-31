@@ -34,7 +34,7 @@
     "prettier": "3.5.3",
     "tailwindcss": "^4.3.3",
     "vite": "^8.2.2",
-    "vite-plugin-vue-devtools": "^7.7.2"
+    "vite-plugin-vue-devtools": "^8.2.1"
   },
   "description": "This template should help get you started developing with Vue 3 in Vite.",
   "main": "eslint.config.js",
