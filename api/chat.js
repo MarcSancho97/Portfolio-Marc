@@ -1,5 +1,6 @@
+// api/chat.js
 export default async function handler(req, res) {
-  // 1. Establecer cabeceras CORS de forma incondicional
+  // 1. Cabeceras CORS obligatorias
   res.setHeader('Access-Control-Allow-Credentials', 'true')
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
@@ -8,7 +9,7 @@ export default async function handler(req, res) {
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
   )
 
-  // 2. Responder INMEDIATAMENTE al Preflight (OPTIONS) del navegador con 200 OK
+  // 2. Responder 200 OK al preflight inmediatamente
   if (req.method === 'OPTIONS') {
     return res.status(200).end()
   }
@@ -18,25 +19,24 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Manejar el parseo del body por si viene como String o como Objeto
     let body = req.body
     if (typeof body === 'string') {
       try {
         body = JSON.parse(body)
       } catch (e) {
-        // Ignorar si no se puede parsear
+        // Ignorar si ya era objeto
       }
     }
 
     const { history } = body || {}
 
     if (!history || !Array.isArray(history)) {
-      return res.status(400).json({ error: 'El historial de mensajes es obligatorio' })
+      return res.status(400).json({ error: 'El historial es obligatorio' })
     }
 
     const apiKey = process.env.OPENROUTER_API_KEY
     if (!apiKey) {
-      console.error('OPENROUTER_API_KEY no configurada en Vercel')
+      console.error('Falta OPENROUTER_API_KEY')
       return res.status(500).json({ error: 'Error de configuración en el servidor' })
     }
 
@@ -97,7 +97,7 @@ export default async function handler(req, res) {
     const aiResponse = data?.choices?.[0]?.message?.content
     return res.status(200).json({ content: aiResponse })
   } catch (error) {
-    console.error('Error en Serverless Function:', error)
+    console.error('Error Serverless:', error)
     return res.status(500).json({ error: 'Error interno del servidor', details: error.message })
   }
 }
