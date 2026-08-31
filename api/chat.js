@@ -1,43 +1,45 @@
-// api/chat.js
-export default async function handler(req, res) {
-  // 1. Cabeceras CORS obligatorias
-  res.setHeader('Access-Control-Allow-Credentials', 'true')
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
-  )
+export const config = {
+  runtime: 'edge',
+}
 
-  // 2. Responder 200 OK al preflight inmediatamente
+export default async function handler(req) {
+  const corsHeaders = {
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+    'Access-Control-Allow-Headers':
+      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
+  }
+
+  // 1. Responder inmediatamente a peticiones OPTIONS (Preflight)
   if (req.method === 'OPTIONS') {
-    return res.status(200).end()
+    return new Response(null, { status: 200, headers: corsHeaders })
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Método no permitido' })
+    return new Response(JSON.stringify({ error: 'Método no permitido' }), {
+      status: 405,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   }
 
   try {
-    let body = req.body
-    if (typeof body === 'string') {
-      try {
-        body = JSON.parse(body)
-      } catch (e) {
-        // Ignorar si ya era objeto
-      }
-    }
-
+    const body = await req.json()
     const { history } = body || {}
 
     if (!history || !Array.isArray(history)) {
-      return res.status(400).json({ error: 'El historial es obligatorio' })
+      return new Response(JSON.stringify({ error: 'El historial es obligatorio' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     }
 
     const apiKey = process.env.OPENROUTER_API_KEY
     if (!apiKey) {
-      console.error('Falta OPENROUTER_API_KEY')
-      return res.status(500).json({ error: 'Error de configuración en el servidor' })
+      return new Response(JSON.stringify({ error: 'Falta la API Key en el servidor' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     }
 
     const myInfo = {
@@ -91,13 +93,21 @@ export default async function handler(req, res) {
     const data = await openRouterRes.json()
 
     if (!openRouterRes.ok) {
-      return res.status(openRouterRes.status).json({ error: data })
+      return new Response(JSON.stringify({ error: data }), {
+        status: openRouterRes.status,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
     }
 
     const aiResponse = data?.choices?.[0]?.message?.content
-    return res.status(200).json({ content: aiResponse })
+    return new Response(JSON.stringify({ content: aiResponse }), {
+      status: 200,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   } catch (error) {
-    console.error('Error Serverless:', error)
-    return res.status(500).json({ error: 'Error interno del servidor', details: error.message })
+    return new Response(JSON.stringify({ error: 'Error en el servidor', details: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   }
 }
