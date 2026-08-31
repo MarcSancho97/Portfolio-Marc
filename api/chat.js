@@ -56,7 +56,8 @@ export default async function handler(req, res) {
       hobbies: ['Programar', 'Viajar', 'Hacer deporte'],
       contact: {
         email: 'marcsancho97@gmail.com',
-        github: 'github.com/marc-dev',
+        github: 'https://github.com/marcsancho97',
+        linkedin: 'https://www.linkedin.com/in/marc-sancho-garcia-98a317274/', // <-- Reemplaza con tu URL de LinkedIn
       },
     }
 
