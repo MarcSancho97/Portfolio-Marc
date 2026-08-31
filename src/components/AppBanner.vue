@@ -2,9 +2,9 @@
   <header
     class="relative flex flex-col items-center justify-center h-56 sm:h-72 md:h-[400px] text-white text-center px-4 sm:px-6 py-8 sm:py-10 shadow-md overflow-hidden"
   >
-    <!-- Imagen de fondo real -->
+    <!-- Imagen de fondo utilizando la variable importada -->
     <img
-      src="/banner.jpg"
+      :src="bannerImg"
       alt="Hero Banner"
       class="absolute inset-0 w-full h-full object-cover object-center"
     />
@@ -30,6 +30,9 @@
   </header>
 </template>
 
-<script setup></script>
+<script setup>
+// Importamos la imagen desde src/assets/images/banners/banner.jpeg
+import bannerImg from '@/assets/images/banners/banner.jpeg'
+</script>
 
 <style scoped></style>
