@@ -11,7 +11,7 @@ export default async function handler(req) {
       'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization',
   }
 
-  // 1. Responder inmediatamente a peticiones OPTIONS (Preflight)
+  // 1. Responder a peticiones preflight (OPTIONS)
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 200, headers: corsHeaders })
   }
@@ -24,11 +24,22 @@ export default async function handler(req) {
   }
 
   try {
-    const body = await req.json()
-    const { history } = body || {}
+    let history = []
 
-    if (!history || !Array.isArray(history)) {
-      return new Response(JSON.stringify({ error: 'El historial es obligatorio' }), {
+    // Lectura segura del body
+    try {
+      const bodyText = await req.text()
+      const body = bodyText ? JSON.parse(bodyText) : {}
+      history = body.history || []
+    } catch (e) {
+      return new Response(JSON.stringify({ error: 'Formato JSON inválido en la petición' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
+
+    if (!Array.isArray(history)) {
+      return new Response(JSON.stringify({ error: 'El historial debe ser un array' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       })
@@ -36,10 +47,14 @@ export default async function handler(req) {
 
     const apiKey = process.env.OPENROUTER_API_KEY
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'Falta la API Key en el servidor' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
+      console.error('OPENROUTER_API_KEY no encontrada en process.env')
+      return new Response(
+        JSON.stringify({ error: 'Falta OPENROUTER_API_KEY en las variables de entorno de Vercel' }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        },
+      )
     }
 
     const myInfo = {
@@ -93,10 +108,14 @@ export default async function handler(req) {
     const data = await openRouterRes.json()
 
     if (!openRouterRes.ok) {
-      return new Response(JSON.stringify({ error: data }), {
-        status: openRouterRes.status,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
+      console.error('Respuesta de error de OpenRouter:', data)
+      return new Response(
+        JSON.stringify({ error: 'Error devuelto por la API de OpenRouter', details: data }),
+        {
+          status: openRouterRes.status,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        },
+      )
     }
 
     const aiResponse = data?.choices?.[0]?.message?.content
@@ -105,9 +124,13 @@ export default async function handler(req) {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Error en el servidor', details: error.message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    })
+    console.error('Error no capturado en Edge Function:', error)
+    return new Response(
+      JSON.stringify({ error: 'Error interno en la Edge Function', details: error.message }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      },
+    )
   }
 }
