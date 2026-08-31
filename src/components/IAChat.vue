@@ -177,50 +177,66 @@ import AppBanner from './AppBanner.vue'
 
 /* ---------------- CONFIG ---------------- */
 
-const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY
-const myInfo = {
-  name: 'Marc Sancho',
-  role: 'Desarrollador Full-Stack',
-  location: 'La Ràpita, Tarragona, Cataluña, España',
+const API_URL = 'https://portfolio-marc-zeta.vercel.app/api/chat'
 
-  skills: {
-    frontend: ['HTML5', 'CSS3', 'JavaScript', 'VueJS', 'TailwindCSS'],
-    backend: ['PHP', 'Laravel', 'MySQL', 'Python'],
-    tools: ['Git', 'Docker'],
-  },
-
-  projects: [
-    {
-      name: 'To-Do List',
-      tech: ['Vue 3', 'TailwindCSS'],
-    },
-    {
-      name: 'Asistente virtual con IA',
-      tech: ['Vue 3', 'OpenRouter'],
-    },
-  ],
-
-  experience: ['Pymeralia', 'AKX Development'],
-
-  studies: [
-    'Desarrollo de Aplicaciones Web - Amposta - INS Montsia',
-    'Sistemas Microinformáticos y Redes - Amposta - INS Montsia',
-  ],
-
-  languages: ['Español', 'Catalán', 'Inglés B2'],
-
-  hobbies: ['Programar', 'Viajar', 'Hacer deporte'],
-
-  contact: {
-    email: 'marcsancho97@gmail.com',
-    github: 'github.com/marc-dev',
-  },
-}
 /* ---------------- STATE ---------------- */
-
 const userInput = ref('')
 const isLoading = ref(false)
 const messages = ref([])
+
+/* ... (resto de funciones auxiliares como parseMarkdown, scrollToBottom, addMessage) ... */
+
+/* ---------------- SEND MESSAGE ---------------- */
+
+const sendMessage = async () => {
+  if (isLoading.value) return
+
+  const message = userInput.value.trim()
+  if (!message) return
+
+  isLoading.value = true
+
+  try {
+    await addMessage({
+      role: 'user',
+      content: message,
+    })
+
+    userInput.value = ''
+
+    const history = messages.value
+      .filter((m) => (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+      .slice(-10)
+      .map((m) => ({
+        role: m.role,
+        content: m.content,
+      }))
+
+    /* Petición al backend proxy seguro */
+    /* Petición al backend en Vercel */
+    const response = await axios.post(API_URL, { history }, { timeout: 60000 })
+    const aiResponse = response?.data?.content
+
+    if (!aiResponse) {
+      throw new Error('Respuesta vacía')
+    }
+
+    await addMessage({
+      role: 'assistant',
+      content: aiResponse,
+    })
+  } catch (error) {
+    console.error(error)
+
+    await addMessage({
+      role: 'assistant',
+      content: '⚠️ Error conectando con el asistente.',
+      isError: true,
+    })
+  } finally {
+    isLoading.value = false
+  }
+}
 
 /* ---------------- MARKDOWN ---------------- */
 
@@ -269,99 +285,6 @@ const handleQuickSuggestion = async (suggestion) => {
   userInput.value = suggestion
 
   await sendMessage()
-}
-
-/* ---------------- SEND MESSAGE ---------------- */
-
-const sendMessage = async () => {
-  if (isLoading.value) return
-
-  const message = userInput.value.trim()
-
-  if (!message) return
-
-  isLoading.value = true
-
-  try {
-    /* usuario */
-
-    await addMessage({
-      role: 'user',
-      content: message,
-    })
-
-    userInput.value = ''
-
-    /* historial */
-
-    const history = messages.value
-      .filter((m) => (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
-      .slice(-10)
-      .map((m) => ({
-        role: m.role,
-        content: m.content,
-      }))
-
-    /* request */
-
-    const response = await axios.post(
-      'https://openrouter.ai/api/v1/chat/completions',
-      {
-        model: 'openai/gpt-4o-mini',
-
-        messages: [
-          {
-            role: 'system',
-            content: `
-Eres el asistente virtual de Marc Sancho.
-
-${JSON.stringify(myInfo, null, 2)}
-`,
-          },
-
-          ...history,
-        ],
-
-        temperature: 0.7,
-        max_tokens: 500,
-      },
-
-      /* ✅ HEADERS */
-
-      {
-        headers: {
-          Authorization: `Bearer ${API_KEY}`,
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'Portfolio Marc Sancho',
-          'Content-Type': 'application/json',
-        },
-
-        timeout: 60000,
-      },
-    )
-    const aiResponse = response?.data?.choices?.[0]?.message?.content
-
-    if (!aiResponse) {
-      throw new Error('Respuesta vacía')
-    }
-
-    /* IA */
-
-    await addMessage({
-      role: 'assistant',
-      content: aiResponse,
-    })
-  } catch (error) {
-    console.error(error)
-
-    await addMessage({
-      role: 'assistant',
-      content: '⚠️ Error conectando con OpenRouter.',
-      isError: true,
-    })
-  } finally {
-    isLoading.value = false
-  }
 }
 
 /* ---------------- INIT ---------------- */
