@@ -43,10 +43,13 @@ export default async function handler(req, res) {
         backend: ['PHP', 'Laravel', 'MySQL', 'Python'],
         tools: ['Git', 'Docker'],
       },
-      projects: [
-        { name: 'To-Do List', tech: ['Vue 3', 'TailwindCSS'] },
-        { name: 'Asistente virtual con IA', tech: ['Vue 3', 'OpenRouter'] },
-      ],
+      projects: {
+        githubRepository: 'https://github.com/marcsancho97',
+        list: [
+          { name: 'To-Do List', tech: ['Vue 3', 'TailwindCSS'] },
+          { name: 'Asistente virtual con IA', tech: ['Vue 3', 'OpenRouter'] },
+        ],
+      },
       experience: ['Pymeralia', 'AKX Development'],
       studies: [
         'Desarrollo de Aplicaciones Web - Amposta - INS Montsia',
@@ -56,11 +59,13 @@ export default async function handler(req, res) {
       hobbies: ['Programar', 'Viajar', 'Hacer deporte'],
       contact: {
         email: 'marcsancho97@gmail.com',
-        github: 'https://github.com/marcsancho97',
-        linkedin: 'https://www.linkedin.com/in/marc-sancho-garcia-98a317274/', // <-- Reemplaza con tu URL de LinkedIn
+        linkedin: 'https://www.linkedin.com/in/marc-sancho-garcia-98a317274/',
       },
+      instructions: [
+        'Si te preguntan por proyectos, código fuente o repositorios de Marc, ofrece su GitHub (https://github.com/marcsancho97).',
+        'Si te preguntan cómo contactar con Marc o por sus redes profesionales, proporciona su email y su LinkedIn, pero NO su GitHub salvo que pidan ver su código.',
+      ],
     }
-
     const openRouterRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
