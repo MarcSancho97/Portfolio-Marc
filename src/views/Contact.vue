@@ -16,7 +16,6 @@
         class="max-w-5xl mx-auto bg-white/10 p-12 rounded-xl grid grid-cols-1 md:grid-cols-2 gap-12 items-start"
       >
         <!-- Datos de contacto -->
-        <!-- Datos de contacto (embellecido) -->
         <div class="space-y-6">
           <h2 class="text-3xl font-semibold mb-4">Datos de contacto</h2>
           <div class="space-y-6 text-lg">
@@ -29,11 +28,11 @@
               </div>
               <div class="flex-1">
                 <a
-                  href="https://github.com/iMarc-97"
+                  href="https://github.com/marcsancho97"
                   target="_blank"
                   class="block font-medium hover:underline"
                 >
-                  github.com/iMarc-97
+                  github.com/marcsancho97
                 </a>
               </div>
             </div>
@@ -61,6 +60,7 @@
         <!-- Formulario -->
         <div>
           <h2 class="text-3xl font-semibold mb-6">Formulario de contacto</h2>
+
           <form @submit.prevent="submitForm" class="space-y-4">
             <input
               v-model="name"
@@ -68,6 +68,7 @@
               placeholder="Tu nombre"
               class="w-full p-3 border border-white rounded-md bg-transparent placeholder-white focus:outline-none focus:ring-2 focus:ring-white"
               required
+              :disabled="isSubmitting"
             />
             <input
               v-model="email"
@@ -75,6 +76,7 @@
               placeholder="Tu correo electrónico"
               class="w-full p-3 border border-white rounded-md bg-transparent placeholder-white focus:outline-none focus:ring-2 focus:ring-white"
               required
+              :disabled="isSubmitting"
             />
             <textarea
               v-model="message"
@@ -82,12 +84,15 @@
               placeholder="Tu mensaje"
               class="w-full p-3 border border-white rounded-md bg-transparent placeholder-white focus:outline-none focus:ring-2 focus:ring-white"
               required
+              :disabled="isSubmitting"
             ></textarea>
+
             <button
               type="submit"
-              class="w-full bg-white text-blue-900 px-4 py-3 font-semibold rounded-md hover:bg-gray-200 transition"
+              :disabled="isSubmitting"
+              class="w-full bg-white text-blue-900 px-4 py-3 font-semibold rounded-md hover:bg-gray-200 transition shadow-lg disabled:opacity-70"
             >
-              Enviar mensaje
+              {{ isSubmitting ? 'Enviando...' : 'Enviar mensaje' }}
             </button>
           </form>
         </div>
@@ -109,20 +114,47 @@ export default {
       name: '',
       email: '',
       message: '',
+      isSubmitting: false, // Controla el estado del botón
     }
   },
   methods: {
-    submitForm() {
-      // Aquí puedes manejar el envío, como enviar a un backend o mostrar una alerta
-      console.log('Formulario enviado:', {
-        nombre: this.name,
-        email: this.email,
-        mensaje: this.message,
-      })
-      this.name = ''
-      this.email = ''
-      this.message = ''
-      alert('Gracias por tu mensaje ✉️')
+    async submitForm() {
+      this.isSubmitting = true
+
+      try {
+        // Hacemos la petición POST a FormSubmit en modo AJAX
+        const response = await fetch(
+          'https://formsubmit.co/ajax/2daa486a923c7fe320d879d615c7c350',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              _subject: `¡Nuevo mensaje de ${this.name} en tu Portfolio!`,
+              Nombre: this.name,
+              Email: this.email,
+              Mensaje: this.message,
+            }),
+          },
+        )
+
+        if (response.ok) {
+          alert('¡Gracias por tu mensaje! Te responderé lo antes posible ✉️')
+          // Limpiamos el formulario
+          this.name = ''
+          this.email = ''
+          this.message = ''
+        } else {
+          alert('Hubo un problema al enviar el mensaje. Por favor, inténtalo de nuevo.')
+        }
+      } catch (error) {
+        console.error(error)
+        alert('Error de conexión. Revisa tu internet e inténtalo de nuevo.')
+      } finally {
+        this.isSubmitting = false
+      }
     },
   },
 }
