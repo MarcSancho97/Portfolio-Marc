@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-gradient-to-r from-blue-500 to-blue-950 text-white flex flex-col">
+  <div class="h-screen bg-gray-900 text-white flex flex-col">
     <div class="max-w-6xl mx-auto w-full py-16 flex-1 overflow-y-auto p-1">
       <h1 class="text-3xl font-bold mb-6 text-center">To-Do List</h1>
 

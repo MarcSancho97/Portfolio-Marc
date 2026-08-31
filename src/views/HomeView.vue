@@ -18,22 +18,27 @@
     <!-- Sección de habilidades -->
     <SkillsSection />
 
-    <!-- Sección de proyectos u otras secciones -->
-    <section class="bg-gradient-to-r from-blue-600 to-blue-950 text-white py-14 sm:py-16">
+    <!-- Sección de proyectos u otras secciones con contraste y separación clara del footer -->
+    <section class="bg-gray-900 text-white py-14 sm:py-16 relative border-t border-gray-800">
+      <!-- Línea divisoria superior con degradado para marcar el corte -->
+      <div
+        class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent"
+      ></div>
+
       <div
         class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-around gap-12"
       >
         <div
           v-for="(section, index) in sections"
           :key="index"
-          class="flex flex-col items-center text-center w-full"
+          class="bg-white/10 p-6 rounded-xl hover:scale-105 transition-transform flex flex-col items-center text-center"
         >
           <!-- Imagen -->
           <router-link :to="section.route" class="block w-full">
             <img
               :src="section.image"
               :alt="section.alt"
-              class="rounded-lg hover:scale-105 transition-transform duration-300 shadow-lg"
+              class="rounded-lg hover:scale-105 transition-transform duration-300 shadow-lg border border-gray-800"
             />
           </router-link>
 
@@ -41,14 +46,14 @@
           <div class="w-full mt-6">
             <!-- Título con altura fija para uniformidad -->
             <h3
-              class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 sm:mb-4 pt-2 w-full min-h-[3rem] sm:min-h-[3.5rem] md:min-h-[4rem]"
+              class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 sm:mb-4 pt-2 w-full min-h-[3rem] sm:min-h-[3.5rem] md:min-h-[4rem] text-gray-200"
             >
               {{ section.title }}
             </h3>
 
             <!-- Descripción ligeramente más pequeña y uniforme -->
             <p
-              class="mb-4 italic text-sm sm:text-base md:text-lg max-w-xs mx-auto opacity-90 leading-relaxed"
+              class="mb-4 italic text-sm sm:text-base md:text-lg max-w-xs mx-auto text-gray-400 leading-relaxed"
             >
               {{ section.description }}
             </p>
@@ -56,7 +61,7 @@
             <!-- Botón -->
             <router-link
               :to="section.route"
-              class="bg-white text-gray-900 px-4 py-2 font-semibold rounded-lg hover:bg-gray-200 transition-all duration-200 inline-block"
+              class="bg-gray-800 text-white border border-gray-700 px-4 py-2 font-semibold rounded-lg hover:bg-gray-700 transition-all duration-200 inline-block"
             >
               Ver más
             </router-link>

@@ -1,8 +1,13 @@
 <template>
-  <section class="bg-gradient-to-r from-blue-500 to-blue-950 py-16 text-white">
+  <section class="bg-gray-900 py-20 text-white relative">
+    <!-- Línea divisoria superior con degradado para separar con elegancia -->
+    <div
+      class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent"
+    ></div>
+
     <div class="max-w-6xl mx-auto px-4 text-center">
-      <h2 class="text-4xl font-bold mb-6">Mi enfoque en cada proyecto</h2>
-      <p class="italic mb-12 mx-auto">
+      <h2 class="text-4xl font-bold mb-6 text-gray-200">Mi enfoque en cada proyecto</h2>
+      <p class="italic mb-16 mx-auto text-gray-400 max-w-3xl leading-relaxed text-lg">
         Combino experiencia técnica y creatividad para desarrollar soluciones web claras,
         funcionales y adaptadas a cada necesidad. Mi objetivo es entregar resultados sólidos,
         eficientes y fáciles de usar, siempre buscando la mejor forma de resolver retos y ofrecer un

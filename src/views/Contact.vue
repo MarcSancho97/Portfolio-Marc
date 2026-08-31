@@ -11,7 +11,7 @@
     </AppBanner>
 
     <!-- Sección principal a dos columnas simétricas -->
-    <section class="bg-gradient-to-br from-blue-500 to-blue-950 py-16 px-4 sm:px-6 lg:px-8">
+    <section class="bg-gray-800 py-16 px-4 sm:px-6 lg:px-8">
       <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
         <!-- Columna Izquierda: Tarjeta de LinkedIn y GitHub -->
         <div

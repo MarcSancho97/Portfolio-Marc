@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-gray-800 text-white py-6">
+  <footer class="bg-gray-700 text-white py-6">
     <div class="container mx-auto px-4 max-w-6xl">
       <!-- Contenedor de las 3 columnas -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-2">
@@ -13,14 +13,26 @@
         <div>
           <h3 class="text-lg font-semibold mb-3">Enlaces Útiles</h3>
           <ul class="space-y-2">
-            <li><router-link to="/" class="text-sm hover:text-gray-400">Inicio</router-link></li>
             <li>
-              <router-link to="/projects" class="text-sm hover:text-gray-400"
+              <router-link
+                to="/"
+                class="text-gray-300 px-4 py-2 rounded transition duration-300 hover:bg-gray-900 text-white"
+                >Inicio</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                to="/projects"
+                class="text-gray-300 px-4 py-2 rounded transition duration-300 hover:bg-gray-900 text-white"
                 >Proyectos</router-link
               >
             </li>
             <li>
-              <router-link to="/contact" class="text-sm hover:text-gray-400">Contacto</router-link>
+              <router-link
+                to="/contact"
+                class="text-gray-300 px-4 py-2 rounded transition duration-300 hover:bg-gray-900 text-white"
+                >Contacto</router-link
+              >
             </li>
           </ul>
         </div>

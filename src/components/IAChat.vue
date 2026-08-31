@@ -8,14 +8,12 @@
     </template>
   </AppBanner>
 
-  <section
-    class="min-h-screen bg-gradient-to-br from-blue-500 to-blue-950 py-8 px-4 sm:px-6 lg:px-8"
-  >
+  <section class="min-h-screen bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
     <div
       class="max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden"
     >
       <!-- Cabecera del chat -->
-      <div class="bg-gradient-to-r from-blue-500 to-blue-950 p-4 text-white">
+      <div class="bg-gray-800 p-4 text-white">
         <div class="flex items-center space-x-3">
           <div class="relative">
             <div class="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center">
@@ -145,7 +143,7 @@
           <button
             type="submit"
             :disabled="isLoading || !userInput.trim()"
-            class="bg-gradient-to-r from-blue-600 to-blue-950 text-white p-3 rounded-full shadow-lg shadow-gray-400 transition-all transform hover:bg-indigo-700 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:pointer-events-none disabled:scale-100"
+            class="bg-gradient-to-r from-gray-900 text-white p-3 rounded-full shadow-lg transition-all transform hover:bg-gray-700 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:pointer-events-none disabled:scale-100"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
