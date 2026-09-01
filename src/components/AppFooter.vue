@@ -30,7 +30,7 @@
             <li>
               <router-link
                 to="/contact"
-                class="text-gray-300 px-4 py-2 rounded transition duration-300 hover:bg-gray-900 text-white"
+                class="text-gray-300 px-4 py-2 rounded transition duration-300 hover:bg-gray-900 text-whitegit-m"
                 >Contacto</router-link
               >
             </li>
