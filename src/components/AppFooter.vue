@@ -2,7 +2,7 @@
   <footer class="bg-gray-700 text-white py-8">
     <div class="container mx-auto px-4 max-w-6xl">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-2">
-        <div>
+        <div class="mr-4 border-r border-gray-300">
           <h3 class="text-lg font-semibold mb-3">Sobre este sitio</h3>
           <p class="text-sm leading-relaxed">
             Web desarrollada con Vue.js y Tailwind CSS para mostrar mis proyectos, habilidades y
@@ -10,7 +10,7 @@
           </p>
         </div>
 
-        <div>
+        <div class="mr-4 border-r border-gray-300">
           <h3 class="text-lg font-semibold mb-3">Enlaces Útiles</h3>
           <ul class="space-y-2">
             <li>
@@ -45,7 +45,7 @@
                 href="https://github.com/MarcSancho97"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="hover:text-white transition duration-300"
+                class="hover:text-gray-900 transition duration-300"
                 title="GitHub"
               >
                 <i class="fa-brands fa-square-github text-3xl"></i>
@@ -56,7 +56,7 @@
                 href="https://www.linkedin.com/in/marc-sancho-garcia-98a317274"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="hover:text-white transition duration-300"
+                class="hover:text-gray-900 transition duration-300"
                 title="LinkedIn"
               >
                 <i class="fa-brands fa-linkedin text-3xl"></i>
@@ -65,7 +65,7 @@
             <li>
               <router-link
                 to="/contact"
-                class="hover:text-white transition duration-300 inline-block"
+                class="hover:text-gray-900 transition duration-300 inline-block"
                 title="Ir al formulario de contacto"
               >
                 <i class="fa-solid fa-at text-3xl"></i>

@@ -90,7 +90,7 @@ export default {
         },
         {
           id: 3,
-          title: 'SmartNotes AI',
+          title: 'SmartNotes IA',
           description:
             'Notas locales potenciadas con inteligencia artificial para organizar ideas, editarlas y resumirlas al instante. \n \n  Desarrollada con Vue y OpenRouter.',
           image: new URL('@/assets/images/images_projects/smartnotes.png', import.meta.url).href,
