@@ -36,7 +36,9 @@
               {{ project.title }}
             </h2>
 
-            <p class="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed mb-6 flex-grow">
+            <p
+              class="text-sm sm:text-base md:text-lg text-gray-400 whitespace-pre-line leading-relaxed mb-6 flex-grow"
+            >
               {{ project.description }}
             </p>
 
@@ -74,15 +76,15 @@ export default {
           id: 1,
           title: 'To-Do List',
           description:
-            'Aplicación para gestionar tareas diarias con opciones de agregar, editar, marcar como completadas y eliminar tareas. Desarrollada con Vue.',
+            'Aplicación para gestionar tareas diarias con opciones de agregar, editar, marcar como completadas y eliminar tareas. \n \n Desarrollada con Vue.',
           image: new URL('@/assets/images/images_projects/todoList.png', import.meta.url).href,
           link: '/ToDo',
         },
         {
           id: 2,
-          title: 'Asistente Virtual Personalizado',
+          title: 'Asistente IA',
           description:
-            'Aplicación de chat impulsada por IA que responde preguntas sobre el perfil, experiencia y habilidades de Marc. Desarrollada con Vue y OpenRouter',
+            'Aplicación de chat impulsada por IA que responde preguntas sobre el perfil, experiencia y habilidades de Marc.  \n \n Desarrollada con Vue y OpenRouter.',
           image: new URL('@/assets/images/images_projects/iachat.png', import.meta.url).href,
           link: '/IAChat',
         },
@@ -90,7 +92,7 @@ export default {
           id: 3,
           title: 'SmartNotes AI',
           description:
-            'Notas locales potenciadas con inteligencia artificial para organizar ideas, editarlas y resumirlas al instante.',
+            'Notas locales potenciadas con inteligencia artificial para organizar ideas, editarlas y resumirlas al instante. \n \n  Desarrollada con Vue y OpenRouter.',
           image: new URL('@/assets/images/images_projects/smartnotes.png', import.meta.url).href,
           link: '/SmartNotes',
         },
