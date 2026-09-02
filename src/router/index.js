@@ -5,6 +5,7 @@ import Projects from '../views/Projects.vue'
 import Contact from '../views/Contact.vue'
 import ToDo from '../views/ToDo.vue'
 import IAChat from '../components/IAChat.vue'
+import SmartNotes from '../components/SmartNotes.vue'
 
 const routes = [
   { path: '/', name: 'home', component: Home },
@@ -12,6 +13,7 @@ const routes = [
   { path: '/contact', name: 'contact', component: Contact },
   { path: '/todo', name: 'todo', component: ToDo },
   { path: '/iachat', name: 'iachat', component: IAChat },
+  { path: '/smartnotes', name: 'smartnotes', component: SmartNotes },
 ]
 
 const router = createRouter({

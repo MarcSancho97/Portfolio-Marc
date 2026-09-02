@@ -1,10 +1,10 @@
 <template>
   <AppBanner>
     <template #title>
-      <h1 class="text-6xl font-bold">Chatea con mi asistente</h1>
+      <h1>Chatea con mi asistente</h1>
     </template>
     <template #content>
-      <p class="mt-4 italic">Conoce más sobre mi experiencia, proyectos y habilidades.</p>
+      <p>Conoce más sobre mi experiencia, proyectos y habilidades.</p>
     </template>
   </AppBanner>
 
@@ -12,7 +12,6 @@
     <div
       class="max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden"
     >
-      <!-- Cabecera del chat -->
       <div class="bg-gray-800 p-4 text-white">
         <div class="flex items-center space-x-3">
           <div class="relative">
@@ -43,7 +42,6 @@
         </div>
       </div>
 
-      <!-- Área de chat -->
       <div
         class="h-[500px] overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-white/95 to-blue-50/50 chat-history"
       >
@@ -60,7 +58,6 @@
           ]"
         >
           <div class="prose prose-sm max-w-none" v-html="parseMarkdown(message.content)"></div>
-          <!-- Hora del mensaje -->
           <p class="text-xs mt-1 opacity-70 text-right">
             {{
               message.time?.toLocaleTimeString([], {
@@ -71,7 +68,6 @@
           </p>
         </div>
 
-        <!-- Indicador de carga -->
         <div v-if="isLoading" class="flex justify-start">
           <div
             class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 max-w-[85%] rounded-bl-none"
@@ -91,7 +87,6 @@
         </div>
       </div>
 
-      <!-- Sugerencias rápidas -->
       <div
         v-if="quickSuggestions.length && !isLoading"
         class="px-4 pt-2 pb-1 bg-white/80 border-t border-gray-200"
@@ -109,7 +104,6 @@
         </div>
       </div>
 
-      <!-- Input de usuario -->
       <div class="p-4 bg-white border-t border-gray-200">
         <form @submit.prevent="sendMessage" class="flex gap-2">
           <div class="relative flex-1">
@@ -173,16 +167,10 @@ import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import AppBanner from './AppBanner.vue'
 
-/* ---------------- CONFIG ---------------- */
-
 const API_URL = 'https://portfolio-marc-zeta.vercel.app/api/chat'
-
-/* ---------------- STATE ---------------- */
 const userInput = ref('')
 const isLoading = ref(false)
 const messages = ref([])
-
-/* ---------------- SEND MESSAGE ---------------- */
 
 const sendMessage = async () => {
   if (isLoading.value) return
@@ -208,7 +196,6 @@ const sendMessage = async () => {
         content: m.content,
       }))
 
-    /* Petición al backend en Vercel */
     const response = await axios.post(API_URL, { history }, { timeout: 60000 })
     const aiResponse = response?.data?.content
 
@@ -233,15 +220,11 @@ const sendMessage = async () => {
   }
 }
 
-/* ---------------- MARKDOWN ---------------- */
-
 const parseMarkdown = (text) => {
   if (!text) return ''
 
   return DOMPurify.sanitize(marked.parse(text))
 }
-
-/* ---------------- SCROLL ---------------- */
 
 const scrollToBottom = async () => {
   await nextTick()
@@ -253,8 +236,6 @@ const scrollToBottom = async () => {
   }
 }
 
-/* ---------------- ADD MESSAGE ---------------- */
-
 const addMessage = async (message) => {
   messages.value.push({
     ...message,
@@ -263,8 +244,6 @@ const addMessage = async (message) => {
 
   await scrollToBottom()
 }
-
-/* ---------------- QUICK SUGGESTIONS ---------------- */
 
 const quickSuggestions = computed(() => [
   '¿Qué tecnologías dominas?',
@@ -281,8 +260,6 @@ const handleQuickSuggestion = async (suggestion) => {
 
   await sendMessage()
 }
-
-/* ---------------- INIT ---------------- */
 
 onMounted(async () => {
   await addMessage({
@@ -347,7 +324,7 @@ Soy el asistente virtual de Marc.
   color: #1d4ed8;
   text-decoration-thickness: 2px;
 }
-/* --- ANIMACIÓN DE APARICIÓN PARA LOS MENSAJES --- */
+
 :deep(.chat-history > div) {
   animation: fadeInMessage 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -357,13 +334,13 @@ Soy el asistente virtual de Marc.
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* --- ESTILO MEJORADO PARA LOS ENLACES --- */
 :deep(.prose a) {
   color: #2563eb;
   font-weight: 650;

@@ -1,6 +1,5 @@
 <template>
   <section class="bg-gray-900 py-20 text-white relative">
-    <!-- Línea divisoria superior con degradado para separar con elegancia -->
     <div
       class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent"
     ></div>

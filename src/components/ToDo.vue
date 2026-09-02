@@ -1,51 +1,71 @@
 <template>
-  <div class="h-screen bg-gray-900 text-white flex flex-col">
-    <div class="max-w-6xl mx-auto w-full py-16 flex-1 overflow-y-auto p-1">
-      <h1 class="text-3xl font-bold mb-6 text-center">To-Do List</h1>
+  <div class="min-h-screen bg-gray-900 text-white flex flex-col p-6">
+    <div class="max-w-4xl mx-auto w-full flex-1 overflow-y-auto">
+      <header class="mb-8 text-center">
+        <h1 class="text-3xl font-bold tracking-tight">To-Do List</h1>
+        <p class="text-gray-400 text-sm mt-1">
+          Gestiona tus tareas diarias de forma rápida y organizada
+        </p>
+      </header>
 
-      <!-- Add Task Form -->
-      <form @submit.prevent="addTask" class="flex flex-col md:flex-row gap-2 mb-8">
-        <input
-          v-model="newTaskText"
-          class="flex-1 p-3 rounded bg-white/10 focus:ring-2 focus:ring-blue-300"
-          placeholder="New task…"
-        />
-        <select
-          v-model="newTaskStatus"
-          class="p-3 rounded bg-white/10 backdrop-blur text-white/80 focus:ring-2 focus:ring-blue-300"
-        >
-          <option value="" disabled selected>Selecciona un estado</option>
-          <option value="pending" class="text-black">Pendiente</option>
-          <option value="completed" class="text-black">Completado</option>
-        </select>
-        <button
-          class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded transition focus:ring-2 focus:ring-blue-300"
-        >
-          Añadir
-        </button>
-      </form>
+      <section
+        class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/10 mb-8"
+      >
+        <h2 class="text-xl font-semibold mb-4 text-gray-200">Nueva Tarea</h2>
+        <form @submit.prevent="addTask" class="flex flex-col md:flex-row gap-3">
+          <input
+            v-model="newTaskText"
+            class="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500"
+            placeholder="Escribe una nueva tarea..."
+            required
+          />
+          <select
+            v-model="newTaskStatus"
+            class="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-gray-300 focus:outline-none focus:border-indigo-500"
+          >
+            <option value="" disabled selected>Selecciona un estado</option>
+            <option value="pending" class="bg-gray-900 text-white">Pendiente</option>
+            <option value="completed" class="bg-gray-900 text-white">Completado</option>
+          </select>
+          <button
+            type="submit"
+            class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/10"
+          >
+            Añadir
+          </button>
+        </form>
+      </section>
 
-      <!-- Edit Alert -->
       <div
         v-if="showEditHint && !suppressEditHint"
-        class="bg-yellow-500/80 border border-yellow-400 text-yellow-900 p-4 rounded mb-6 flex items-center justify-between"
+        class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/10"
       >
-        <span>💡 Haz doble click en una tarea para editarla. </span>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" v-model="suppressEditHint" @change="onCheckboxChange" />
+        <span
+          >💡 <strong>Tip:</strong> Haz doble clic en cualquier tarea para editarla
+          directamente.</span
+        >
+        <label
+          class="flex items-center gap-2 cursor-pointer text-gray-300 hover:text-white transition"
+        >
+          <input
+            type="checkbox"
+            v-model="suppressEditHint"
+            @change="onCheckboxChange"
+            class="rounded bg-gray-900 border-gray-700 text-indigo-600 focus:ring-indigo-500"
+          />
           No mostrar de nuevo
         </label>
       </div>
 
-      <!-- Task Columns -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Pending Tasks -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div
-          class="bg-white/10 p-4 rounded-xl shadow backdrop-blur"
+          class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/10"
           @dragover.prevent
           @drop="(event) => handleDrop(event, 'pending')"
         >
-          <h2 class="text-xl font-semibold mb-3">Pendientes</h2>
+          <h2 class="text-lg font-semibold mb-3 text-indigo-300 flex items-center gap-2">
+            <i class="fa-solid fa-clock text-indigo-400"></i> Pendientes
+          </h2>
           <ul class="space-y-2">
             <li
               v-for="(task, index) in pendingTasks"
@@ -56,51 +76,52 @@
               @dragleave="dragOverTaskId = null"
               @drop="handleReorderDrop($event, task.id, false)"
               :class="[
-                'flex justify-between items-center bg-white/5 p-2 rounded cursor-move transition-all duration-200',
+                'flex justify-between items-center bg-gray-900/60 border p-3 rounded-lg cursor-move transition-all duration-200',
                 dragOverTaskId === task.id
-                  ? 'border-2 border-blue-400 scale-[1.02] bg-blue-400/20'
-                  : 'border-2 border-transparent',
+                  ? 'border-indigo-400 scale-[1.02] bg-indigo-950/40'
+                  : 'border-gray-700/60 hover:border-gray-600',
               ]"
             >
               <div class="flex items-center gap-3 flex-1">
-                <span class="text-blue-200 font-bold w-6">
-                  {{ index + 1 }}
-                </span>
-
+                <span class="text-indigo-400 font-bold text-sm w-5"> {{ index + 1 }}. </span>
                 <div class="flex-1">
                   <span
                     v-if="editingTaskId !== task.id"
                     @dblclick="startEditing(task)"
-                    class="block cursor-pointer"
+                    class="block cursor-pointer text-gray-200 text-sm"
                   >
                     {{ task.text }}
                   </span>
-
                   <input
                     v-else
                     v-model="editedTaskText"
                     @keyup.enter="saveEdit(task)"
                     @blur="saveEdit(task)"
                     @keyup.esc="cancelEdit"
-                    class="w-full p-1 rounded bg-white/20 text-white focus:outline-none"
+                    class="w-full bg-gray-900 border border-indigo-500 rounded px-2 py-1 text-white text-sm focus:outline-none"
+                    autofocus
                   />
                 </div>
               </div>
-
-              <button @click="deleteById(task.id)" class="text-red-300 hover:text-red-500 ml-2">
-                ✖
+              <button
+                @click="deleteById(task.id)"
+                class="text-gray-500 hover:text-red-400 transition ml-2 p-1"
+                title="Eliminar tarea"
+              >
+                <i class="fa-solid fa-trash-can text-xs"></i>
               </button>
             </li>
           </ul>
         </div>
 
-        <!-- Completed Tasks -->
         <div
-          class="bg-white/10 p-4 rounded-xl shadow backdrop-blur"
+          class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/10"
           @dragover.prevent
           @drop="(event) => handleDrop(event, 'completed')"
         >
-          <h2 class="text-xl font-semibold mb-3">Completadas</h2>
+          <h2 class="text-lg font-semibold mb-3 text-emerald-300 flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i> Completadas
+          </h2>
           <ul class="space-y-2">
             <li
               v-for="(task, index) in completedTasks"
@@ -111,83 +132,84 @@
               @dragleave="dragOverTaskId = null"
               @drop="handleReorderDrop($event, task.id, task.completed)"
               :class="[
-                'flex justify-between items-center bg-white/5 p-2 rounded backdrop-blur cursor-move transition-all duration-200',
+                'flex justify-between items-center bg-gray-900/60 border p-3 rounded-lg cursor-move transition-all duration-200',
                 dragOverTaskId === task.id
-                  ? 'border-2 border-blue-400 scale-[1.02] bg-blue-400/20'
-                  : 'border-2 border-transparent',
+                  ? 'border-emerald-400 scale-[1.02] bg-emerald-950/40'
+                  : 'border-gray-700/60 hover:border-gray-600',
               ]"
             >
               <div class="flex items-center gap-3 flex-1">
-                <span class="text-white text-xs">
-                  {{ index + 1 }}
-                </span>
-
+                <span class="text-emerald-400 font-bold text-xs w-5"> {{ index + 1 }}. </span>
                 <div class="flex-1">
                   <span
                     v-if="editingTaskId !== task.id"
                     @dblclick="startEditing(task)"
-                    :class="{ 'line-through text-gray-300': task.completed }"
-                    class="block cursor-pointer"
+                    :class="{ 'line-through text-gray-500': task.completed }"
+                    class="block cursor-pointer text-gray-300 text-sm"
                   >
                     {{ task.text }}
                   </span>
-
                   <input
                     v-else
                     v-model="editedTaskText"
                     @keyup.enter="saveEdit(task)"
                     @blur="saveEdit(task)"
                     @keyup.esc="cancelEdit"
-                    class="w-full p-1 rounded bg-white/20 text-white focus:outline-none"
+                    class="w-full bg-gray-900 border border-emerald-500 rounded px-2 py-1 text-white text-sm focus:outline-none"
+                    autofocus
                   />
                 </div>
               </div>
-
-              <button @click="deleteById(task.id)" class="text-red-300 hover:text-red-500 ml-2">
-                ✖
+              <button
+                @click="deleteById(task.id)"
+                class="text-gray-500 hover:text-red-400 transition ml-2 p-1"
+                title="Eliminar tarea"
+              >
+                <i class="fa-solid fa-trash-can text-xs"></i>
               </button>
             </li>
           </ul>
         </div>
       </div>
 
-      <!-- All Tasks View -->
-      <div class="bg-white/10 p-4 rounded-xl shadow backdrop-blur mt-4">
-        <h2 class="text-xl font-semibold mb-3">Todas las tareas</h2>
+      <div class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/10">
+        <h2 class="text-lg font-semibold mb-3 text-gray-200 flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-gray-400"></i> Todas las tareas
+        </h2>
         <ul class="space-y-2">
           <li
             v-for="(task, index) in taskList"
             :key="task.id"
-            class="flex justify-between items-center bg-white/5 p-2 rounded backdrop-blur"
+            class="flex justify-between items-center bg-gray-900/60 border border-gray-700/60 p-3 rounded-lg transition"
           >
             <div class="flex items-center gap-3 flex-1">
-              <span class="text-white text-xs">
-                {{ index + 1 }}
-              </span>
-
+              <span class="text-gray-400 font-bold text-xs w-5"> {{ index + 1 }}. </span>
               <div class="flex-1">
                 <span
                   v-if="editingTaskId !== task.id"
                   @dblclick="startEditing(task)"
-                  :class="{ 'line-through text-gray-300': task.completed }"
-                  class="block cursor-pointer"
+                  :class="{ 'line-through text-gray-500': task.completed }"
+                  class="block cursor-pointer text-gray-300 text-sm"
                 >
                   {{ task.text }}
                 </span>
-
                 <input
                   v-else
                   v-model="editedTaskText"
                   @keyup.enter="saveEdit(task)"
                   @blur="saveEdit(task)"
                   @keyup.esc="cancelEdit"
-                  class="w-full p-1 rounded bg-white/20 text-white focus:outline-none"
+                  class="w-full bg-gray-900 border border-gray-500 rounded px-2 py-1 text-white text-sm focus:outline-none"
+                  autofocus
                 />
               </div>
             </div>
-
-            <button @click="deleteById(task.id)" class="text-red-300 hover:text-red-500 ml-2">
-              ✖
+            <button
+              @click="deleteById(task.id)"
+              class="text-gray-500 hover:text-red-400 transition ml-2 p-1"
+              title="Eliminar tarea"
+            >
+              <i class="fa-solid fa-trash-can text-xs"></i>
             </button>
           </li>
         </ul>

@@ -1,21 +1,15 @@
 <template>
   <div>
-    <!-- Banner principal -->
     <AppBanner>
       <template v-slot:title>
-        <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight text-gray-100">
-          Proyectos
-        </h1>
+        <h1>Proyectos</h1>
       </template>
 
       <template v-slot:content>
-        <p class="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl italic text-gray-400">
-          Aquí podrás ver algunos de mis proyectos.
-        </p>
+        <p>Aquí podrás ver algunos de mis proyectos.</p>
       </template>
     </AppBanner>
 
-    <!-- Sección de proyectos con estilo gris-negro -->
     <section class="bg-gray-900 py-14 sm:py-16 md:py-20 text-white border-t border-gray-900">
       <div class="max-w-6xl mx-auto px-6 sm:px-8">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
@@ -24,7 +18,6 @@
             :key="project.id"
             class="bg-white/10 p-6 sm:p-8 rounded-2xl border border-gray-800 hover:border-gray-700 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center text-center shadow-xl group"
           >
-            <!-- Imagen del proyecto -->
             <div
               v-if="project.image"
               class="mb-6 p-3 rounded-xl group-hover:scale-105 transition-transform duration-300"
@@ -37,7 +30,6 @@
               />
             </div>
 
-            <!-- Contenido -->
             <h2
               class="text-xl sm:text-2xl md:text-3xl font-semibold pt-2 sm:pt-4 mb-4 text-gray-100 leading-snug"
             >
@@ -48,7 +40,6 @@
               {{ project.description }}
             </p>
 
-            <!-- Botón -->
             <div class="w-full mt-auto" v-if="project.link">
               <component
                 :is="isInternalLink(project.link) ? 'router-link' : 'a'"
@@ -56,7 +47,7 @@
                 :href="!isInternalLink(project.link) ? project.link : undefined"
                 :target="!isInternalLink(project.link) ? '_blank' : undefined"
                 :rel="!isInternalLink(project.link) ? 'noopener noreferrer' : undefined"
-                class="w-full inline-block bg-gray-800 text-gray-200 border border-gray-700 px-5 py-3 font-semibold rounded-xl hover:bg-gray-700 text-white transition-all duration-200 text-center shadow-md"
+                class="w-full inline-block bg-gray-800 text-gray-200 border border-gray-700 px-5 py-3 font-semibold rounded-xl hover:bg-gray-900 text-white transition-all duration-200 text-center shadow-md"
               >
                 Ver proyecto
               </component>
@@ -97,10 +88,11 @@ export default {
         },
         {
           id: 3,
-          title: 'Portfolio en línea',
-          description: 'Sitio web personal desplegado.',
-          image: '',
-          link: '',
+          title: 'SmartNotes AI',
+          description:
+            'Notas locales potenciadas con inteligencia artificial para organizar ideas, editarlas y resumirlas al instante conectadas con tu backend.',
+          image: new URL('@/assets/images/images_projects/smartnotes.png', import.meta.url).href,
+          link: '/SmartNotes',
         },
       ],
     }

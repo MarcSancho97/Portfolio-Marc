@@ -1,11 +1,11 @@
 <template>
   <AppBanner>
     <template v-slot:title>
-      <h1 class="text-6xl font-bold">To-Do List</h1>
+      <h1>To-Do List</h1>
     </template>
 
     <template v-slot:content>
-      <p class="mt-4 italic">
+      <p>
         Esto es un organizador de tareas en el cual puedes hacer arrastrar y soltar para modificar
         el estado de las tareas
       </p>

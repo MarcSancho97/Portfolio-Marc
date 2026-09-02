@@ -1,19 +1,16 @@
 <template>
   <div>
-    <!-- Banner -->
     <AppBanner>
       <template v-slot:title>
-        <h1 class="text-5xl font-bold">Contacto</h1>
+        <h1>Contacto</h1>
       </template>
       <template v-slot:content>
-        <p class="mt-4 italic">¿Quieres contactarme? Conecta conmigo o envíame un mensaje.</p>
+        <p>¿Quieres contactarme? Conecta conmigo o envíame un mensaje.</p>
       </template>
     </AppBanner>
 
-    <!-- Sección principal a dos columnas simétricas -->
     <section class="bg-gray-800 py-16 px-4 sm:px-6 lg:px-8">
       <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-        <!-- Columna Izquierda: Tarjeta de LinkedIn y GitHub -->
         <div
           class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow-xl flex flex-col justify-between border border-white/10"
         >
@@ -25,7 +22,6 @@
             </p>
 
             <div class="space-y-4">
-              <!-- LinkedIn -->
               <a
                 href="https://www.linkedin.com/in/marc-sancho-garcia-98a317274/"
                 target="_blank"
@@ -44,7 +40,6 @@
                 </div>
               </a>
 
-              <!-- GitHub -->
               <a
                 href="https://github.com/marcsancho97"
                 target="_blank"
@@ -70,12 +65,10 @@
           </div>
         </div>
 
-        <!-- Columna Derecha: Formulario de Contacto -->
         <div class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/10">
           <h2 class="text-2xl font-bold text-white mb-4">Envíame un mensaje</h2>
 
           <form @submit.prevent="submitForm" class="space-y-4">
-            <!-- Campo trampa antispam (Honeypot invisible) -->
             <input
               type="text"
               name="_honey"
@@ -117,7 +110,7 @@
             <button
               type="submit"
               :disabled="isSubmitting"
-              class="w-full bg-white text-blue-950 px-6 py-3.5 font-bold rounded-xl hover:bg-blue-50 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-70 transform hover:-translate-y-0.5"
+              class="w-full inline-block bg-gray-800 text-gray-200 border border-gray-700 px-5 py-3 font-semibold rounded-xl hover:bg-gray-900 text-white transition-all duration-200 text-center shadow-md"
             >
               {{ isSubmitting ? 'Enviando...' : 'Enviar mensaje' }}
             </button>
@@ -142,30 +135,26 @@ export default {
       email: '',
       message: '',
       isSubmitting: false,
-      mountTime: null, // Control de tiempo anti-bots
+      mountTime: null,
     }
   },
   mounted() {
-    // Registramos el momento exacto en el que se carga la vista
     this.mountTime = Date.now()
   },
   methods: {
     async submitForm() {
-      // 1. Control de tiempo: Si envían el formulario en menos de 4 segundos, se bloquea
       const elapsedTime = Date.now() - this.mountTime
       if (elapsedTime < 4000) {
         alert('Por favor, tómate tu tiempo para redactar el mensaje.')
         return
       }
 
-      // 2. Filtro anti-enlaces: Si el mensaje contiene URLs, se bloquea por seguridad
       const urlPattern = /https?:\/\/[^\s]+/gi
       if (urlPattern.test(this.message)) {
         alert('Por seguridad, no se permiten enlaces en el mensaje de contacto.')
         return
       }
 
-      // 3. Verificación avanzada de correo real
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       const emailDomain = this.email.split('@')[1]?.toLowerCase()
       const disposableDomains = [
