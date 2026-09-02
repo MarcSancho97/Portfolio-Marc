@@ -74,7 +74,7 @@ export default {
           id: 1,
           title: 'To-Do List',
           description:
-            'Aplicación para gestionar tareas diarias con opciones de agregar, editar, marcar como completadas y eliminar tareas. Desarrollada con Vue y localStorage.',
+            'Aplicación para gestionar tareas diarias con opciones de agregar, editar, marcar como completadas y eliminar tareas. Desarrollada con Vue.',
           image: new URL('@/assets/images/images_projects/todoList.png', import.meta.url).href,
           link: '/ToDo',
         },
@@ -90,7 +90,7 @@ export default {
           id: 3,
           title: 'SmartNotes AI',
           description:
-            'Notas locales potenciadas con inteligencia artificial para organizar ideas, editarlas y resumirlas al instante conectadas con tu backend.',
+            'Notas locales potenciadas con inteligencia artificial para organizar ideas, editarlas y resumirlas al instante.',
           image: new URL('@/assets/images/images_projects/smartnotes.png', import.meta.url).href,
           link: '/SmartNotes',
         },

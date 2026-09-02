@@ -29,7 +29,7 @@
           </select>
           <button
             type="submit"
-            class="bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-white/10"
+            class="inline-block bg-gray-800 text-gray-200 border border-gray-700 px-5 py-3 font-semibold rounded-xl hover:bg-gray-900 text-white transition-all duration-200 text-center shadow-md"
           >
             Añadir
           </button>
