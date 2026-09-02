@@ -48,7 +48,6 @@ export default async function handler(req, res) {
         list: [
           { name: 'To-Do List', tech: ['Vue 3', 'TailwindCSS'] },
           { name: 'Asistente virtual con IA', tech: ['Vue 3', 'OpenRouter'] },
-          { name: 'SmartNotes', tech: ['Vue 3', 'TailwindCSS', 'OpenRouter'] },
         ],
       },
       experience: ['Pymeralia', 'AKX Development'],
@@ -59,6 +58,7 @@ export default async function handler(req, res) {
       languages: ['Español', 'Catalán', 'Inglés B2'],
       hobbies: ['Programar', 'Viajar', 'Hacer deporte'],
       contact: {
+        email: 'marcsancho97@gmail.com',
         linkedin: 'https://www.linkedin.com/in/marc-sancho-garcia-98a317274/',
       },
       instructions: [
@@ -66,7 +66,6 @@ export default async function handler(req, res) {
         'Si te preguntan cómo contactar con Marc o por sus redes profesionales, proporciona su email y su [LinkedIn](https://www.linkedin.com/in/marc-sancho-garcia-98a317274/), pero NO su GitHub salvo que pidan ver su código.',
       ],
     }
-
     const openRouterRes = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {

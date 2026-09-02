@@ -278,13 +278,20 @@ function handleReorderDrop(event, targetId, completedStatus) {
 }
 
 function deleteById(id) {
-  const index = taskList.value.findIndex((t) => t.id === id)
-  if (index !== -1) {
-    taskList.value.splice(index, 1)
+  const task = taskList.value.find((t) => t.id === id)
+  const taskName = task ? ` "${task.text}"` : ''
+
+  if (window.confirm(`¿Estás seguro de que deseas eliminar la tarea${taskName}?`)) {
+    const index = taskList.value.findIndex((t) => t.id === id)
+    if (index !== -1) {
+      taskList.value.splice(index, 1)
+    }
   }
 }
+
 const pendingTasks = computed(() => taskList.value.filter((t) => !t.completed))
 const completedTasks = computed(() => taskList.value.filter((t) => t.completed))
+
 function startEditing(task) {
   editingTaskId.value = task.id
   editedTaskText.value = task.text

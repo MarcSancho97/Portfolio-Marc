@@ -35,7 +35,7 @@
 
           <div class="w-full mt-6">
             <h3
-              class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 sm:mb-4 pt-2 w-full min-h-[3rem] sm:min-h-[3.5rem] md:min-h-[4rem] text-gray-200"
+              class="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 sm:mb-4 pt-2 w-full min-h-[3rem] sm:min-h-[3.5rem] md:min-h-[4rem]"
             >
               {{ section.title }}
             </h3>

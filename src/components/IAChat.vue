@@ -1,10 +1,10 @@
 <template>
   <AppBanner>
     <template #title>
-      <h1>Chatea con mi asistente</h1>
+      <h1 class="text-6xl font-bold">Chatea con mi asistente</h1>
     </template>
     <template #content>
-      <p>Conoce más sobre mi experiencia, proyectos y habilidades.</p>
+      <p class="mt-4 italic">Conoce más sobre mi experiencia, proyectos y habilidades.</p>
     </template>
   </AppBanner>
 

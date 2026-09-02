@@ -118,7 +118,7 @@
                 class="bg-gray-900/80 p-3 rounded-lg text-xs text-emerald-300 mb-3 border border-emerald-900/50"
               >
                 <span class="font-semibold block mb-1 text-emerald-400"
-                  ><i class="fa-solid fa-wand-magic-sparkles"></i> Resumen IA:</span
+                  ><i class="fa-solid fa-wand-magic-sparkles"></i> Análisis / Explicación IA:</span
                 >
                 {{ note.aiSummary }}
               </div>
@@ -130,7 +130,7 @@
               >
                 <i v-if="note.loading" class="fa-solid fa-spinner animate-spin"></i>
                 <i v-else class="fa-solid fa-brain"></i>
-                <span>{{ note.loading ? 'Generando resumen...' : 'Resumir con IA' }}</span>
+                <span>{{ note.loading ? 'Analizando nota...' : 'Resumir / Explicar con IA' }}</span>
               </button>
             </div>
           </div>
@@ -186,11 +186,18 @@ const addNote = () => {
 }
 
 const deleteNote = (index) => {
-  if (editingIndex.value === index) {
-    cancelEdit()
+  const note = notes.value[index]
+  const noteTitle = note ? ` "${note.title}"` : ''
+
+  if (window.confirm(`¿Estás seguro de que deseas eliminar la nota${noteTitle}?`)) {
+    if (editingIndex.value === index) {
+      cancelEdit()
+    } else if (editingIndex.value > index) {
+      editingIndex.value--
+    }
+    notes.value.splice(index, 1)
+    saveToLocalStorage()
   }
-  notes.value.splice(index, 1)
-  saveToLocalStorage()
 }
 
 const startEdit = (index) => {
@@ -224,11 +231,11 @@ const summarizeNote = async (index) => {
       {
         role: 'system',
         content:
-          'Eres un asistente útil que resume notas de manera concisa en un solo párrafo corto o viñetas.',
+          'Eres un asistente útil y analítico. Si la nota es larga o tiene suficiente texto, genérale un resumen conciso en un párrafo corto o viñetas. Si la nota es muy corta, abstracta o no se puede resumir formalmente, provee una explicación, contexto, interpretación o ampliación útil sobre lo que ha escrito el usuario.',
       },
       {
         role: 'user',
-        content: `Resume la siguiente nota: Título: ${note.title}\nContenido: ${note.content}`,
+        content: `Analiza y resume o explica la siguiente nota: Título: ${note.title}\nContenido: ${note.content}`,
       },
     ]
 
@@ -243,7 +250,7 @@ const summarizeNote = async (index) => {
     saveToLocalStorage()
   } catch (error) {
     console.error('Error al conectar con la API de IA:', error)
-    alert('⚠️ Error conectando con el asistente para generar el resumen.')
+    alert('⚠️ Error conectando con el asistente para procesar la nota.')
   } finally {
     note.loading = false
   }
